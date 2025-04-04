@@ -1,51 +1,139 @@
-# Welcome to your Expo app 👋
+# Redux Counter Demo with React Native and Expo
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This repository demonstrates a basic implementation of a Counter app using Redux in a React Native project bootstrapped with Expo.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **State Management**: Powered by Redux for predictable state management.
+- **Counter Functionality**: Increment, decrement, and reset the counter.
+- **React Native**: Built using React Native for cross-platform mobile development.
+- **Expo**: Simplifies the development process with Expo's powerful tools.
+
+## Prerequisites
+
+Ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/) and npm
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- [Redux Toolkit](https://redux-toolkit.js.org/) and [React-Redux](https://react-redux.js.org/)
+
+## Getting Started
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/redux-demo.git
+   cd redux-demo
+   ```
+
+2. Install dependencies:
 
    ```bash
    npm install
    ```
 
-2. Start the app
+3. Start the Expo development server:
 
    ```bash
-    npx expo start
+   npm start
    ```
 
-In the output, you'll find options to open the app in a
+4. Open the app on your device or emulator using the Expo Go app.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```plaintext
+redux-demo/
+├── App.js               # Entry point of the application
+├── components/          # Reusable React components
+├── redux/               # Redux store, slices, and actions
+│   ├── store.js         # Configures the Redux store
+│   └── counterSlice.js  # Counter slice with actions and reducers
+├── assets/              # Static assets like images
+└── package.json         # Project dependencies and scripts
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Redux Implementation
 
-## Learn more
+The counter logic is implemented using Redux Toolkit. Below is a brief overview:
 
-To learn more about developing your project with Expo, look at the following resources:
+- **Store**: Configured in `store.js` using `configureStore`.
+- **Slice**: The `counterSlice.js` defines the initial state, reducers, and actions (`increment`, `decrement`, `reset`).
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Example Code
 
-## Join the community
+### Counter Slice (`redux/counterSlice.js`)
 
-Join our community of developers creating universal apps.
+```javascript
+import { createSlice } from '@reduxjs/toolkit';
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
-# redux-sample
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: { value: 0 },
+  reducers: {
+    increment: (state) => {
+      state.value += 1;
+    },
+    decrement: (state) => {
+      state.value -= 1;
+    },
+    reset: (state) => {
+      state.value = 0;
+    },
+  },
+});
+
+export const { increment, decrement, reset } = counterSlice.actions;
+export default counterSlice.reducer;
+```
+
+### Counter Component (`components/Counter.js`)
+
+```javascript
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement, reset } from '../redux/counterSlice';
+import { View, Text, Button, StyleSheet } from 'react-native';
+
+const Counter = () => {
+  const count = useSelector((state) => state.counter.value);
+  const dispatch = useDispatch();
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.counterText}>Count: {count}</Text>
+      <Button title="Increment" onPress={() => dispatch(increment())} />
+      <Button title="Decrement" onPress={() => dispatch(decrement())} />
+      <Button title="Reset" onPress={() => dispatch(reset())} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  counterText: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+});
+
+export default Counter;
+```
+
+## Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Acknowledgments
+
+- [Redux Toolkit Documentation](https://redux-toolkit.js.org/)
+- [React Native Documentation](https://reactnative.dev/)
+- [Expo Documentation](https://docs.expo.dev/)
